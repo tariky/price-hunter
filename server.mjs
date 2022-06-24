@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import _ from "lodash";
 import config from "./config.mjs";
 
 const scrape = async (url) => {
@@ -114,5 +115,15 @@ const checkForPrice = async (price, results) => {
   });
 };
 
+const calculateMedianPrice = async (results) => {
+  const itemsCount = results.length;
+  const totalPriceOfAllItems = _.sumBy(results, function (o) {
+    return o.price;
+  });
+  const medianPrice = Number(totalPriceOfAllItems) / Number(itemsCount);
+  return `Prosjeca cijena svih artikala: ${medianPrice.toFixed(2)}KM`;
+};
+
 const results = await scrape(config.linkPretrage);
 console.log(await checkForPrice(config.trazenaCijena, results));
+console.log(await calculateMedianPrice(results));
