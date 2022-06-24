@@ -87,6 +87,10 @@ const magic = async (page) => {
       if (item.querySelectorAll(".na").length !== 0) {
         const item_id = item.getAttribute("id");
         const item_name = item.querySelectorAll(".na")[0].innerText;
+        const olx_link = item
+          .querySelectorAll(".naslov")[0]
+          .querySelectorAll("a")[0]
+          .getAttribute("href");
         // Prvo provjeri da li je snizeno
         const filtered_price = checkIfCompareAtPrice(
           item.querySelectorAll(".datum")[0].querySelectorAll("span")[0]
@@ -100,6 +104,7 @@ const magic = async (page) => {
           item_id,
           item_name,
           price,
+          olx_link,
         });
       }
     });
@@ -124,6 +129,29 @@ const calculateMedianPrice = async (results) => {
   return `Prosjeca cijena svih artikala: ${medianPrice.toFixed(2)}KM`;
 };
 
+const findLowestPrice = async (results) => {
+  const result = _.minBy(results, function (o) {
+    // Provjeri da cijena nije po dogovortu (-1)
+    if (o.price !== -1) {
+      return o.price;
+    }
+  });
+  return `Najniza cijena u pretrazi: ${result.price.toFixed(2)}KM  - Link: ${
+    result.olx_link
+  }`;
+};
+
+const findHighestPrice = async (results) => {
+  const result = _.maxBy(results, function (o) {
+    return o.price;
+  });
+  return `Najvisa cijena u pretrazi: ${result.price.toFixed(2)}KM - Link: ${
+    result.olx_link
+  }`;
+};
+
 const results = await scrape(config.linkPretrage);
 console.log(await checkForPrice(config.trazenaCijena, results));
 console.log(await calculateMedianPrice(results));
+console.log(await findLowestPrice(results));
+console.log(await findHighestPrice(results));
