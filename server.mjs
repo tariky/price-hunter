@@ -39,7 +39,7 @@ const scrape = async (url) => {
   }
   await browser.close();
 
-  if (config.prikazi_kopije) {
+  if (config.iskljuciKopijeIzRezultata) {
     return await removeCopiesFromResults(results);
   } else {
     return results;
