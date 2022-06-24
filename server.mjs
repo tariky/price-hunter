@@ -39,19 +39,19 @@ const scrape = async (url) => {
   }
   await browser.close();
 
+  return await copiesCheck(results, config);
+};
+
+const copiesCheck = async (results, config) => {
   if (config.iskljuciKopijeIzRezultata) {
-    return await removeCopiesFromResults(results);
+    return results.filter((result) => {
+      if (!result.item_name.toLowerCase().includes("kopija")) {
+        return result;
+      }
+    });
   } else {
     return results;
   }
-};
-
-const removeCopiesFromResults = async (results) => {
-  return results.filter((result) => {
-    if (!result.item_name.toLowerCase().includes("kopija")) {
-      return result;
-    }
-  });
 };
 
 const magic = async (page) => {
