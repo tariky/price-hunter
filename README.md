@@ -5,8 +5,9 @@ Price hunter je bot za pretragu artikala na olx.ba platformi. Trenutno je u alph
 ## Kako pokrenuti bot
 
 1. Instalirajte potrebne module, sa npm install ili yarn add.
-2. Unutar config.mjs datoteke izmjenite zeljene parametre.
-3. Pokrenite app sa npm start.
+2. Preimenujte config-sample.mjs u config.mjs.
+3. Unutar config.mjs datoteke izmjenite zeljene parametre.
+4. Pokrenite app sa npm start.
 
 ## Licenca
 
