@@ -39,7 +39,9 @@ const scrape = async (url) => {
   }
   await browser.close();
 
-  return await copiesCheck(results, config);
+  const checkForCopies = await copiesCheck(results, config);
+  const priceFiltering = await priceFilter(checkForCopies, config);
+  return priceFiltering;
 };
 
 const copiesCheck = async (results, config) => {
@@ -52,6 +54,14 @@ const copiesCheck = async (results, config) => {
   } else {
     return results;
   }
+};
+
+const priceFilter = async (results, config) => {
+  return results.filter((result) => {
+    if (result.price > config.cijenaOd && result.price < config.cijenaDo) {
+      return result;
+    }
+  });
 };
 
 const magic = async (page) => {
