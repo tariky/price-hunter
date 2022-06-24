@@ -1,6 +1,6 @@
 # 🥷 Price Hunter
 
-Price hunter je bot za pretragu artikala na olx.ba platformi. Treutno je u alpha fazi razvoja, te mnoge planirane opcije jos uvijek nisu dostupne.
+Price hunter je bot za pretragu artikala na olx.ba platformi. Trenutno je u alpha fazi razvoja, te mnoge planirane opcije jos uvijek nisu dostupne.
 
 ## Kako pokrenuti bot
 
