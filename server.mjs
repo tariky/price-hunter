@@ -38,12 +38,24 @@ const scrape = async (url) => {
     }
   }
   await browser.close();
-  return results;
-  //   return numberOfPages;
+
+  if (config.prikazi_kopije) {
+    return await removeCopiesFromResults(results);
+  } else {
+    return results;
+  }
+};
+
+const removeCopiesFromResults = async (results) => {
+  return results.filter((result) => {
+    if (!result.item_name.toLowerCase().includes("kopija")) {
+      return result;
+    }
+  });
 };
 
 const magic = async (page) => {
-  return await page.evaluate(() => {
+  return await page.evaluate(function () {
     /*
           Ova funkcija rjesava problem sa snizenim cijenama koje su prikazne na OLX
           ukoliko postoji snizena cijena biti ce filtrirana i prikazana kao cijena u sistemu
@@ -112,6 +124,7 @@ const magic = async (page) => {
         const po_dogovoru_check = checkIfPoDogovoru(filtered_price);
         // Trece ukloni valutu, izbrisi tacku i pretvori u broj
         const price = removeCurrencyFromPrice(po_dogovoru_check);
+
         ids.push({
           item_id,
           item_name,
@@ -163,7 +176,11 @@ const findHighestPrice = async (results) => {
 };
 
 const results = await scrape(config.linkPretrage);
-console.log(await checkForPrice(config.trazenaCijena, results));
-console.log(await calculateMedianPrice(results));
-console.log(await findLowestPrice(results));
-console.log(await findHighestPrice(results));
+if (results.length === 0) {
+  console.log("Nema rezultata");
+} else {
+  console.log(await checkForPrice(config.trazenaCijena, results));
+  console.log(await calculateMedianPrice(results));
+  console.log(await findLowestPrice(results));
+  console.log(await findHighestPrice(results));
+}

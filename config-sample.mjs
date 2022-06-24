@@ -4,6 +4,7 @@ const config = {
   trazenaCijena: 2000,
   // Cekanje se definise u milisekundama
   cekanjeIzmjeduStranica: 1000,
+  prikazi_kopije: true,
 };
 
 export default config;
