@@ -73,12 +73,24 @@ const magic = async (page) => {
           cijenu u stvari Number format
         */
     function removeCurrencyFromPrice(price) {
-      // Prvi prolaz ukloni KM
-      const first_pass = price.split("K")[0];
-      // Drugi uklonii tacki
-      const second_pass = first_pass.replaceAll(".", "");
-      // Vrati u number formatu
-      return Number(second_pass);
+      // Provjeri da li cijena ima comma
+      const check_comma = price.split(",");
+      if (check_comma.length > 1) {
+        // Prvi prolaz ukloni KM
+        const first_pass = price.split("K")[0];
+        // Drugi uklonii tacki
+        const second_pass = first_pass.replaceAll(".", "");
+        // ukloni comma
+        const third_pass = second_pass.split(",")[0];
+        return Number(third_pass);
+      } else {
+        // Prvi prolaz ukloni KM
+        const first_pass = price.split("K")[0];
+        // Drugi uklonii tacki
+        const second_pass = first_pass.replaceAll(".", "");
+        // Vrati u number formatu
+        return Number(second_pass);
+      }
     }
 
     var ids = [];
