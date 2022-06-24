@@ -19,14 +19,30 @@ const scrape = async (url) => {
     const totalResult = document
       .querySelectorAll(".brojrezultata")[0]
       .querySelectorAll("span")[0].innerText;
-    const numberOfItemsPerPage = 30;
-    const calculateNumberOfPages = Number(totalResult) / numberOfItemsPerPage;
-    const result =
-      calculateNumberOfPages - Math.floor(calculateNumberOfPages) !== 0;
-    if (result) {
-      return Math.floor(calculateNumberOfPages) + 2;
+    // Provjera da li ima preko 1000 rezultata... jer na olx su 1000 => 1.000
+    if (totalResult.split(".").length === 2) {
+      const removeDotFromNumber = totalResult.replaceAll(".", "");
+      const numberOfItemsPerPage = 30;
+      const calculateNumberOfPages =
+        Number(removeDotFromNumber) / numberOfItemsPerPage;
+      const result =
+        calculateNumberOfPages - Math.floor(calculateNumberOfPages) !== 0;
+      if (result) {
+        return Math.floor(calculateNumberOfPages) + 2;
+      } else {
+        return calculateNumberOfPages;
+      }
     } else {
-      return calculateNumberOfPages;
+      const numberOfItemsPerPage = 30;
+      const calculateNumberOfPages =
+        Number(removeDotFromNumber) / numberOfItemsPerPage;
+      const result =
+        calculateNumberOfPages - Math.floor(calculateNumberOfPages) !== 0;
+      if (result) {
+        return Math.floor(calculateNumberOfPages) + 2;
+      } else {
+        return calculateNumberOfPages;
+      }
     }
   });
 
@@ -44,7 +60,7 @@ const scrape = async (url) => {
     }
   }
   await browser.close();
-
+  console.log(numberOfPages);
   const checkForCopies = await copiesCheck(results, config);
   const priceFiltering = await priceFilter(checkForCopies, config);
   return priceFiltering;
