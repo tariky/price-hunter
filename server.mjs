@@ -34,8 +34,7 @@ const scrape = async (url) => {
       }
     } else {
       const numberOfItemsPerPage = 30;
-      const calculateNumberOfPages =
-        Number(removeDotFromNumber) / numberOfItemsPerPage;
+      const calculateNumberOfPages = Number(totalResult) / numberOfItemsPerPage;
       const result =
         calculateNumberOfPages - Math.floor(calculateNumberOfPages) !== 0;
       if (result) {

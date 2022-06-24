@@ -4,7 +4,10 @@ const config = {
   trazenaCijena: 2000,
   // Cekanje se definise u milisekundama
   cekanjeIzmjeduStranica: 1000,
-  prikazi_kopije: true,
+  iskljuciKopijeIzRezultata: true,
+  ukloniRezultate: ["kopija", "max"],
+  cijenaOd: 150,
+  cijenaDo: 1000000,
 };
 
 export default config;
