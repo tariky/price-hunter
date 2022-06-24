@@ -1,6 +1,12 @@
 import puppeteer from "puppeteer";
 import _ from "lodash";
 import config from "./config.mjs";
+import priceFilter from "./util/priceFilter.mjs";
+import copiesCheck from "./util/copiesCheck.mjs";
+import checkForPrice from "./util/checkForPrice.mjs";
+import calculateMedianPrice from "./util/calculateMedianPrice.mjs";
+import findLowestPrice from "./util/findLowestPrice.mjs";
+import findHighestPrice from "./util/findHighestPrice.mjs";
 
 const scrape = async (url) => {
   const browser = await puppeteer.launch({ headless: true });
@@ -42,26 +48,6 @@ const scrape = async (url) => {
   const checkForCopies = await copiesCheck(results, config);
   const priceFiltering = await priceFilter(checkForCopies, config);
   return priceFiltering;
-};
-
-const copiesCheck = async (results, config) => {
-  if (config.iskljuciKopijeIzRezultata) {
-    return results.filter((result) => {
-      if (!result.item_name.toLowerCase().includes("kopija")) {
-        return result;
-      }
-    });
-  } else {
-    return results;
-  }
-};
-
-const priceFilter = async (results, config) => {
-  return results.filter((result) => {
-    if (result.price > config.cijenaOd && result.price < config.cijenaDo) {
-      return result;
-    }
-  });
 };
 
 const magic = async (page) => {
@@ -149,41 +135,6 @@ const magic = async (page) => {
 };
 
 // Pronadji artikle koji su jednaki ili ispod definisane cijene
-const checkForPrice = async (price, results) => {
-  return results.filter((result) => {
-    return result.price <= Number(price);
-  });
-};
-
-const calculateMedianPrice = async (results) => {
-  const itemsCount = results.length;
-  const totalPriceOfAllItems = _.sumBy(results, function (o) {
-    return o.price;
-  });
-  const medianPrice = Number(totalPriceOfAllItems) / Number(itemsCount);
-  return `Prosjeca cijena svih artikala: ${medianPrice.toFixed(2)}KM`;
-};
-
-const findLowestPrice = async (results) => {
-  const result = _.minBy(results, function (o) {
-    // Provjeri da cijena nije po dogovortu (-1)
-    if (o.price !== -1) {
-      return o.price;
-    }
-  });
-  return `Najniza cijena u pretrazi: ${result.price.toFixed(2)}KM  \nLink: ${
-    result.olx_link
-  }`;
-};
-
-const findHighestPrice = async (results) => {
-  const result = _.maxBy(results, function (o) {
-    return o.price;
-  });
-  return `Najvisa cijena u pretrazi: ${result.price.toFixed(2)}KM \nLink: ${
-    result.olx_link
-  }`;
-};
 
 const results = await scrape(config.linkPretrage);
 if (results.length === 0) {
