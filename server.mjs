@@ -32,7 +32,7 @@ const scrape = async (url) => {
     }
     if (index < numberOfPages) {
       // nema next page dugmeta na zadnjoj stranici
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(config.cekanjeIzmjeduStranica);
       await page.goto(`${url}&stranica=${index + 1}`);
       console.log(`${url}&stranica=${index + 1}`);
     }
